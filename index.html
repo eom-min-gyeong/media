@@ -2250,15 +2250,10 @@ $("nt-todo-in").addEventListener("keydown", e => { if (e.key === "Enter") addNot
 
 /* ===== NOTION OAUTH 2.0 인증 & Google Apps Script 프록시 통신 ===== */
 async function callNotionProxy(payload) {
-  // Google Apps Script CORS 우회를 위해 text/plain으로 JSON 전송
-  const res = await fetch(GAS_PROXY_URL, {
-    method: "POST",
-    headers: { "Content-Type": "text/plain;charset=utf-8" },
-    body: JSON.stringify(payload)
-  });
+  const url = `${GAS_PROXY_URL}?payload=${encodeURIComponent(JSON.stringify(payload))}`;
+  const res = await fetch(url);
   return await res.json();
 }
-
 function updateNotionAuthUI() {
   const token = localStorage.getItem("notion_access_token");
   const wsName = localStorage.getItem("notion_workspace_name") || "내 Notion";
