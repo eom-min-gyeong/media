@@ -229,7 +229,7 @@ html, body {
   color: var(--btn-yellow-ink);
 }
 
-input[type=search], input[type=text], input[type=password], select, textarea {
+input[type=search], input[type=text], input[type=url], input[type=password], select, textarea {
   font: inherit;
   font-size: 12px;
   padding: 5px 8px;
@@ -260,6 +260,7 @@ input:focus, select:focus, textarea:focus {
   transition: all 0.15s ease;
 }
 .btn:hover { filter: brightness(1.08); }
+.btn:disabled { opacity: 0.55; cursor: not-allowed; }
 .btn.green { background: var(--neon-green); color: var(--btn-green-ink); }
 .btn.yellow { background: var(--neon-yellow); color: var(--btn-yellow-ink); }
 .btn.s {
@@ -302,9 +303,9 @@ input:focus, select:focus, textarea:focus {
   user-select: text;
 }
 
-#pane-1 { flex: 28 1 0%; }
-#pane-2 { flex: 38 1 0%; }
-#pane-3 { flex: 34 1 0%; }
+#pane-1 { flex: 27 1 0%; }
+#pane-2 { flex: 36 1 0%; }
+#pane-3 { flex: 37 1 0%; }
 
 .gutter {
   width: 10px;
@@ -334,6 +335,7 @@ input:focus, select:focus, textarea:focus {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 6px;
   padding: 8px 12px;
   background: var(--bg-panel-head);
   border-bottom: 1px solid var(--line);
@@ -492,10 +494,6 @@ input:focus, select:focus, textarea:focus {
   margin-bottom: 7px;
 }
 .card:hover { background: var(--bg-card-hover); border-color: var(--line-bright); }
-.card.highlight-pulse {
-  border-color: var(--neon-yellow);
-  box-shadow: 0 0 0 2px var(--neon-yellow-glow);
-}
 .card .top {
   display: flex;
   justify-content: space-between;
@@ -731,7 +729,60 @@ input:focus, select:focus, textarea:focus {
   box-shadow: 0 2px 8px rgba(0,0,0,0.35);
 }
 
-/* ===== PANE 3: 촬영 캘린더 & 타임라인 스케줄러 ===== */
+/* ===== PANE 3: 촬영 캘린더 & 노션 작업공간 ===== */
+.notion-oauth-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 9px;
+  border-radius: 4px;
+  border: 1px solid var(--line-bright);
+  background: var(--bg-card);
+  color: var(--ink);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.notion-oauth-btn:hover {
+  border-color: var(--neon-cyan);
+  color: var(--neon-cyan);
+}
+.notion-oauth-btn.connected {
+  border-color: var(--neon-green);
+  background: var(--neon-green-soft);
+  color: var(--neon-green);
+}
+
+.ch3-mode-tabs {
+  display: flex;
+  gap: 4px;
+  background: var(--bg-rack);
+  padding: 4px;
+  border-radius: 5px;
+  border: 1px solid var(--line);
+  margin-bottom: 8px;
+}
+.ch3-tab {
+  flex: 1;
+  font: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 5px 8px;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--ink-sub);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.ch3-tab.active {
+  background: var(--bg-card);
+  color: var(--neon-cyan);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+}
+
 .cal-toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
 .cal-toolbar h3 { font-family: var(--font-mono); font-size: 14px; margin: 0; color: var(--ink); }
 .cal-hint {
@@ -747,7 +798,7 @@ input:focus, select:focus, textarea:focus {
 .calh, .cal { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; user-select: none; }
 .calh div { font-family: var(--font-mono); font-size: 10px; color: var(--ink-muted); text-align: center; padding-bottom: 3px; }
 .cell {
-  min-height: 64px;
+  min-height: 58px;
   text-align: left;
   font: inherit;
   font-size: 10px;
@@ -907,6 +958,114 @@ input:focus, select:focus, textarea:focus {
   cursor: pointer;
 }
 .qp-btn:hover { border-color: var(--neon-cyan); color: var(--neon-cyan); background: var(--neon-cyan-soft); }
+
+/* ===== NOTION WORKSPACE (서류·자료 보관함 & 블록 에디터) ===== */
+.notion-board {
+  margin-top: 10px;
+  background: var(--bg-card);
+  border: 1px solid var(--line-bright);
+  border-radius: 6px;
+  padding: 12px;
+}
+.notion-board-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+  padding-bottom: 7px;
+  border-bottom: 1px solid var(--line);
+}
+.notion-title-input {
+  width: 100%;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  border: 0 !important;
+  border-bottom: 1px dashed var(--line-bright) !important;
+  border-radius: 0 !important;
+  padding: 4px 2px !important;
+  background: transparent !important;
+  margin-bottom: 8px;
+}
+.notion-title-input:focus {
+  box-shadow: none !important;
+  border-bottom-color: var(--neon-cyan) !important;
+}
+.notion-memo-area {
+  width: 100%;
+  min-height: 76px;
+  resize: vertical;
+  line-height: 1.5;
+  margin-bottom: 8px;
+}
+.notion-sub-sec {
+  background: var(--bg-rack);
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  padding: 8px;
+  margin-bottom: 8px;
+}
+.notion-sub-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--ink-sub);
+  margin-bottom: 6px;
+}
+.doc-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 5px 8px;
+  margin-bottom: 4px;
+  font-size: 11px;
+}
+.doc-item a {
+  color: var(--neon-cyan);
+  font-weight: 600;
+  text-decoration: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.doc-item a:hover { text-decoration: underline; }
+
+.todo-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  padding: 3px 2px;
+  font-size: 12px;
+}
+.todo-item label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  flex: 1;
+}
+.todo-item.done span {
+  text-decoration: line-through;
+  color: var(--ink-muted);
+}
+
+.notion-sync-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: var(--neon-cyan-soft);
+  border: 1px solid var(--neon-cyan);
+  border-radius: 5px;
+  padding: 8px;
+  margin-top: 8px;
+}
 
 /* ===== CALL SHEET (일일 촬영계획표) 모달 & A4 인쇄 스타일 ===== */
 .cs-modal-backdrop {
@@ -1186,91 +1345,181 @@ input:focus, select:focus, textarea:focus {
 
     <div class="gutter" id="gutter-2" title="드래그하여 너비 조절"></div>
 
-    <!-- CH 03: 촬영 캘린더 & 타임라인 -->
+    <!-- CH 03: 촬영 캘린더 & Notion 작업공간 -->
     <section class="pane" id="pane-3">
       <div class="pane-head">
-        <h2><span class="pane-num">CH 03</span> 촬영 캘린더 & 타임라인</h2>
-        <span class="meta" id="sel-range-badge">1일 선택됨</span>
+        <h2><span class="pane-num">CH 03</span> 캘린더 & NOTION 보드</h2>
+        <button class="notion-oauth-btn" id="notion-auth-btn" type="button" title="개인 Notion 계정과 OAuth 2.0으로 연결">
+          🔗 Notion 계정 연결
+        </button>
       </div>
       <div class="pane-body">
-        <div class="cal-toolbar">
-          <div style="display:flex;gap:4px">
-            <button class="btn s" id="pm">◀</button>
-            <button class="btn s" id="tm">오늘</button>
-            <button class="btn s" id="nm">▶</button>
-          </div>
-          <h3 id="cm"></h3>
-          <span class="sub" id="dw-short"></span>
+        <!-- 보기 모드 전환 탭 -->
+        <div class="ch3-mode-tabs">
+          <button class="ch3-tab active" data-view="all" type="button">◫ 달력 + 노션 통합</button>
+          <button class="ch3-tab" data-view="cal" type="button">📅 촬영 달력만</button>
+          <button class="ch3-tab" data-view="notion" type="button">📝 노션 서류·자료함만</button>
         </div>
 
-        <div class="cal-hint">💡 날짜 칸을 <b>마우스로 드래그</b>하면 다중 날짜가 선택됩니다.</div>
-
-        <div class="calh"><div>SUN</div><div>MON</div><div>TUE</div><div>WED</div><div>THU</div><div>FRI</div><div>SAT</div></div>
-        <div class="cal" id="cg"></div>
-
-        <div class="sched-box">
-          <div class="sched-head">
-            <h4 id="dt">날짜 선택</h4>
-            <span class="sub" id="tl-time-txt" style="color:var(--neon-cyan);font-family:var(--font-mono);font-weight:700">09:00 – 18:00 (9.0h)</span>
+        <!-- [구역 A] 촬영 캘린더 & 타임라인 -->
+        <div id="ch3-cal-section">
+          <div class="cal-toolbar">
+            <div style="display:flex;gap:4px">
+              <button class="btn s" id="pm">◀</button>
+              <button class="btn s" id="tm">오늘</button>
+              <button class="btn s" id="nm">▶</button>
+            </div>
+            <h3 id="cm"></h3>
+            <span class="sub" id="sel-range-badge" style="font-family:var(--font-mono);color:var(--neon-cyan)">1일 선택</span>
           </div>
 
-          <div class="sun-strip" id="di"></div>
+          <div class="cal-hint">💡 날짜 칸을 <b>마우스로 드래그</b>하면 다중 날짜가 선택됩니다.</div>
 
-          <div class="tl-wrap">
-            <div class="tl-labels">
-              <span>00:00</span><span>06:00</span><span style="color:var(--neon-yellow)">☀️ GOLDEN / DAYLIGHT</span><span>18:00</span><span>24:00</span>
+          <div class="calh"><div>SUN</div><div>MON</div><div>TUE</div><div>WED</div><div>THU</div><div>FRI</div><div>SAT</div></div>
+          <div class="cal" id="cg"></div>
+
+          <div class="sched-box">
+            <div class="sched-head">
+              <h4 id="dt">날짜 선택</h4>
+              <span class="sub" id="tl-time-txt" style="color:var(--neon-cyan);font-family:var(--font-mono);font-weight:700">09:00 – 18:00 (9.0h)</span>
             </div>
-            <div class="tl-bar" id="tl-bar">
-              <div class="tl-daylight" id="tl-day"></div>
-              <div class="tl-golden" id="tl-gold-am"></div>
-              <div class="tl-golden" id="tl-gold-pm"></div>
-              <div class="tl-grid" id="tl-grid"></div>
-              <div class="tl-sel" id="tl-sel">
-                <div class="tl-handle left" id="tl-h-left">◀</div>
-                <span class="tl-sel-label" id="tl-sel-lbl">09:00 – 18:00</span>
-                <div class="tl-handle right" id="tl-h-right">▶</div>
+
+            <div class="sun-strip" id="di"></div>
+
+            <div class="tl-wrap">
+              <div class="tl-labels">
+                <span>00:00</span><span>06:00</span><span style="color:var(--neon-yellow)">☀️ GOLDEN / DAYLIGHT</span><span>18:00</span><span>24:00</span>
+              </div>
+              <div class="tl-bar" id="tl-bar">
+                <div class="tl-daylight" id="tl-day"></div>
+                <div class="tl-golden" id="tl-gold-am"></div>
+                <div class="tl-golden" id="tl-gold-pm"></div>
+                <div class="tl-grid" id="tl-grid"></div>
+                <div class="tl-sel" id="tl-sel">
+                  <div class="tl-handle left" id="tl-h-left">◀</div>
+                  <span class="tl-sel-label" id="tl-sel-lbl">09:00 – 18:00</span>
+                  <div class="tl-handle right" id="tl-h-right">▶</div>
+                </div>
+              </div>
+
+              <div class="time-adjust-bar">
+                <div class="time-nudge-group">
+                  <span style="color:var(--ink-sub)">IN</span>
+                  <button class="nudge-btn" type="button" id="st-minus">-30m</button>
+                  <strong id="st-val" style="color:var(--neon-cyan);min-width:36px;text-align:center">09:00</strong>
+                  <button class="nudge-btn" type="button" id="st-plus">+30m</button>
+                </div>
+                <span style="color:var(--ink-muted)">⇄</span>
+                <div class="time-nudge-group">
+                  <span style="color:var(--ink-sub)">OUT</span>
+                  <button class="nudge-btn" type="button" id="et-minus">-30m</button>
+                  <strong id="et-val" style="color:var(--neon-cyan);min-width:36px;text-align:center">18:00</strong>
+                  <button class="nudge-btn" type="button" id="et-plus">+30m</button>
+                </div>
               </div>
             </div>
 
-            <div class="time-adjust-bar">
-              <div class="time-nudge-group">
-                <span style="color:var(--ink-sub)">IN</span>
-                <button class="nudge-btn" type="button" id="st-minus">-30m</button>
-                <strong id="st-val" style="color:var(--neon-cyan);min-width:36px;text-align:center">09:00</strong>
-                <button class="nudge-btn" type="button" id="st-plus">+30m</button>
+            <div class="combo-row">
+              <select id="sc-type">
+                <option value="🎬 본촬영">🎬 본촬영</option>
+                <option value="📍 로케이션 사전답사">📍 로케이션 사전답사</option>
+                <option value="🎥 리허설 촬영">🎥 리허설 촬영</option>
+                <option value="📋 프리프로덕션 회의">📋 프리프로덕션 회의</option>
+                <option value="🎨 미술·소품 회의">🎨 미술·소품 회의</option>
+                <option value="💡 조명·촬영팀 기술회의">💡 조명·촬영팀 기술회의</option>
+                <option value="📦 장비 픽업·테스트">📦 장비 픽업·테스트</option>
+                <option value="🚚 장비 반납">🚚 장비 반납</option>
+              </select>
+              <input type="text" id="stt" placeholder="세부 메모 (예: S1 해변 씬)">
+              <button class="btn yellow" id="sa">+ 일정 등록</button>
+            </div>
+
+            <div class="quick-presets" id="quick-chips"></div>
+
+            <div class="sec-divider">
+              <span>SEQUENCE EVENTS // 선택 날짜 일정</span>
+              <span id="ev-cnt">0건</span>
+            </div>
+            <div id="dl"></div>
+          </div>
+        </div>
+
+        <!-- [구역 B] 바로 작업 가능한 Notion 서류·자료 & 프로덕션 노트 -->
+        <div class="notion-board" id="ch3-notion-section">
+          <div class="notion-board-head">
+            <div style="display:flex;align-items:center;gap:6px">
+              <span style="font-size:15px">📓</span>
+              <strong style="font-size:12px;color:var(--ink)">NOTION WORKSPACE // 서류 & 자료 보드</strong>
+            </div>
+            <span class="sub" id="notion-save-status" style="color:var(--neon-green);font-family:var(--font-mono)">● 자동 저장됨</span>
+          </div>
+
+          <!-- 페이지 제목 -->
+          <input type="text" class="notion-title-input" id="nt-title" placeholder="프로젝트 / 회차 문서 제목 입력 (예: 단편영화 프리프로덕션 서류함)">
+
+          <!-- 프리프로덕션 메모 블록 -->
+          <textarea class="notion-memo-area" id="nt-memo" placeholder="여기에 시나리오 수정사항, 헌팅 메모, 스태프 공지 등을 자유롭게 작성하세요. 비회원도 즉시 작성·저장되며, Notion 계정 연결 시 내 노션으로 바로 전송됩니다."></textarea>
+
+          <!-- 서류 및 자료 링크 보관함 -->
+          <div class="notion-sub-sec">
+            <div class="notion-sub-head">
+              <span>📎 서류 · 자료 아카이브 (시나리오, 콘티, 허가서, 드라이브 링크)</span>
+              <span id="nt-doc-cnt">0개</span>
+            </div>
+            <div style="display:flex;gap:4px;margin-bottom:6px;flex-wrap:wrap">
+              <select id="nt-doc-cat" style="width:92px">
+                <option value="📄 시나리오">📄 시나리오</option>
+                <option value="🎬 콘티">🎬 콘티</option>
+                <option value="🏛️ 허가서">🏛️ 허가서</option>
+                <option value="📸 헌팅자료">📸 헌팅자료</option>
+                <option value="📑 지원서류">📑 지원서류</option>
+              </select>
+              <input type="text" id="nt-doc-name" placeholder="자료명 (예: 최종고_v3.pdf)" style="flex:1 1 110px">
+              <input type="url" id="nt-doc-url" placeholder="https:// 링크 (선택)" style="flex:1 1 110px">
+              <button class="btn s" id="nt-add-doc" type="button">+ 추가</button>
+            </div>
+            <div id="nt-doc-list"></div>
+          </div>
+
+          <!-- 프리프로덕션 체크리스트 -->
+          <div class="notion-sub-sec">
+            <div class="notion-sub-head">
+              <span>☑️ 프리프로덕션 체크리스트</span>
+              <span id="nt-todo-cnt">0/0</span>
+            </div>
+            <div style="display:flex;gap:4px;margin-bottom:6px">
+              <input type="text" id="nt-todo-in" placeholder="할 일 추가 (예: 성수동 로케이션 촬영 허가서 제출)" style="flex:1">
+              <button class="btn s" id="nt-add-todo" type="button">+ 추가</button>
+            </div>
+            <div id="nt-todo-list"></div>
+          </div>
+
+          <!-- Notion OAuth 연동 동기화 바 -->
+          <div class="notion-sync-bar" id="notion-sync-panel">
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:wrap">
+              <span style="font-size:11px;font-weight:700;color:var(--neon-cyan)" id="notion-ws-label">
+                🔌 내 Notion 계정을 연결하면 작성한 일정·서류·메모가 내 노션 페이지로 바로 저장됩니다.
+              </span>
+              <button class="btn s" id="notion-disconnect-btn" type="button" hidden>연결 해제</button>
+            </div>
+
+            <div id="notion-connected-controls" hidden style="display:flex;flex-direction:column;gap:6px">
+              <div style="display:flex;gap:5px;align-items:center">
+                <select id="notion-target-page" style="flex:1">
+                  <option value="">연결된 노션 페이지 불러오는 중...</option>
+                </select>
+                <button class="btn s" id="notion-refresh-pages" type="button" title="페이지 목록 새로고침">↻</button>
               </div>
-              <span style="color:var(--ink-muted)">⇄</span>
-              <div class="time-nudge-group">
-                <span style="color:var(--ink-sub)">OUT</span>
-                <button class="nudge-btn" type="button" id="et-minus">-30m</button>
-                <strong id="et-val" style="color:var(--neon-cyan);min-width:36px;text-align:center">18:00</strong>
-                <button class="nudge-btn" type="button" id="et-plus">+30m</button>
+              <div style="display:flex;gap:5px">
+                <button class="btn green" id="notion-push-btn" type="button" style="flex:1">
+                  📤 내 Notion에 현재 일정 & 서류 페이지 생성
+                </button>
+                <a class="btn s" id="notion-open-link" href="https://www.notion.so" target="_blank" rel="noopener" style="text-decoration:none;display:inline-flex;align-items:center">
+                  Notion 열기 ↗
+                </a>
               </div>
             </div>
           </div>
-
-          <div class="combo-row">
-            <select id="sc-type">
-              <option value="🎬 본촬영">🎬 본촬영</option>
-              <option value="📍 로케이션 사전답사">📍 로케이션 사전답사</option>
-              <option value="🎥 리허설 촬영">🎥 리허설 촬영</option>
-              <option value="📋 프리프로덕션 회의">📋 프리프로덕션 회의</option>
-              <option value="🎨 미술·소품 회의">🎨 미술·소품 회의</option>
-              <option value="💡 조명·촬영팀 기술회의">💡 조명·촬영팀 기술회의</option>
-              <option value="📦 장비 픽업·테스트">📦 장비 픽업·테스트</option>
-              <option value="🚚 장비 반납">🚚 장비 반납</option>
-            </select>
-            <input type="text" id="stt" placeholder="세부 메모 (예: S1 해변 씬)">
-            <button class="btn yellow" id="sa">+ 일정 등록</button>
-          </div>
-
-          <div class="quick-presets" id="quick-chips"></div>
-
-          <div class="sec-divider">
-            <span>SEQUENCE EVENTS // 선택 날짜 일정</span>
-            <span id="ev-cnt">0건</span>
-          </div>
-          <div id="dl"></div>
         </div>
       </div>
     </section>
@@ -1310,6 +1559,11 @@ const el = (c, t, tag) => { const e = document.createElement(tag || "div"); if (
 
 $("today").textContent = `TC ${today.getFullYear()}.${pad(today.getMonth() + 1)}.${pad(today.getDate())}`;
 
+/* ===== NOTION OAUTH 2.0 & APPS SCRIPT 중계 서버 설정 ===== */
+const NOTION_CLIENT_ID = "417d872b-594c-81b6-9967-003759b98c41";
+const REDIRECT_URI = "https://eom-min-gyeong.github.io/media/";
+const GAS_PROXY_URL = "https://script.google.com/macros/s/AKfycbxH5nebn58mHfEvwmQ0nXQeTHEOrWZsshg3ir4njI7ZPfr-qy4j0jfr6LbPPkVoXflGdg/exec";
+
 const REG = {
   "서울": [37.5665, 126.9780],
   "경기 광주": [37.4295, 127.2550],
@@ -1337,8 +1591,7 @@ const SHOOT_PRESETS = {
 const regSel = $("reg");
 Object.keys(REG).forEach(k => regSel.appendChild(el("", k, "option")));
 
-/* ===== 브라우저 캐시(localStorage)를 무시하고 처음 열 때는 무조건 라이트 모드로 시작 ===== */
-try { localStorage.removeItem("studio_theme_default_light"); } catch (e) {}
+/* ===== 테마 전환 ===== */
 let currentTheme = "light";
 let mapTileLayer = null;
 
@@ -1395,11 +1648,7 @@ const ORG_META = {
   "한국콘텐츠진흥원": { domain: "kocca.kr", abbr: "KOCCA", color: "#059669" },
   "서울문화재단": { domain: "sfac.or.kr", abbr: "SFAC", color: "#F43F5E" },
   "시청자미디어재단": { domain: "kcmf.or.kr", abbr: "KCMF", color: "#D97706" },
-  "부산영상위원회": { domain: "bfc.or.kr", abbr: "BFC", color: "#EAB308" },
-  "경기콘텐츠진흥원": { domain: "gcon.or.kr", abbr: "GCON", color: "#A855F7" },
-  "전주영상위원회": { domain: "jjfc.or.kr", abbr: "JJFC", color: "#22C55E" },
-  "강원문화재단": { domain: "gwcf.or.kr", abbr: "GWCF", color: "#06B6D4" },
-  "제주콘텐츠진흥원": { domain: "ofjeju.kr", abbr: "JEJU", color: "#FB923C" }
+  "부산영상위원회": { domain: "bfc.or.kr", abbr: "BFC", color: "#EAB308" }
 };
 
 function createOrgBadge(orgName) {
@@ -1432,7 +1681,7 @@ function createOrgBadge(orgName) {
 (function initSplitResizer() {
   const p1 = $("pane-1"), p2 = $("pane-2"), p3 = $("pane-3");
   const g1 = $("gutter-1"), g2 = $("gutter-2");
-  let weights = [28, 38, 34];
+  let weights = [27, 36, 37];
 
   function applyWeights() {
     p1.style.flex = `${weights[0]} 1 0%`;
@@ -1464,16 +1713,16 @@ function createOrgBadge(orgName) {
     });
   }
   setupGutter(g1, 0, 1); setupGutter(g2, 1, 2);
-  $("reset-split").onclick = () => { weights = [28, 38, 34]; applyWeights(); };
+  $("reset-split").onclick = () => { weights = [27, 36, 37]; applyWeights(); };
 })();
 
-/* ===== 지원사업 ===== */
+/* ===== CH 01: 지원사업 ===== */
 const DATA = [
-  { id: "sup-1", t: "단편·독립영화 제작지원 공고", o: "영화진흥위원회", type: "금액 지원", amt: "최대 1,500만원", end: "2026-11-25", stu: true, reg: "전체", kw: ["독립영화", "단편", "성수"] },
-  { id: "sup-2", t: "서울 한강·도심 로케이션 촬영 허가 및 제작 지원", o: "서울영상위원회", type: "로케 지원", amt: "촬영허가 대행·통제 협조", end: "2026-11-20", stu: true, reg: "서울", kw: ["서울", "한강", "여의도", "북촌", "성수"] },
-  { id: "sup-3", t: "신진 크리에이터 숏폼·웹드라마 공모전", o: "한국콘텐츠진흥원", type: "공모전", amt: "상금 500만원", end: "2026-12-05", stu: true, reg: "전체", kw: ["웹드라마", "숏폼"] },
-  { id: "sup-5", t: "청년 영화인 시네마 카메라·조명 무상 대여", o: "시청자미디어재단", type: "장비·공간", amt: "장비 5일 무상 대여", end: "2026-11-30", stu: true, reg: "전체", kw: ["장비"] },
-  { id: "sup-6", t: "부산 로케이션 인센티브 (숙박·식비 환급)", o: "부산영상위원회", type: "로케 지원", amt: "체류비 최대 50% 환급", end: "2026-12-15", stu: true, reg: "부산", kw: ["부산", "해운대", "광안리"] }
+  { id: "sup-1", t: "단편·독립영화 제작지원 공고", o: "영화진흥위원회", type: "금액 지원", amt: "최대 1,500만원", end: "2026-11-25", stu: true, reg: "전체" },
+  { id: "sup-2", t: "서울 한강·도심 로케이션 촬영 허가 및 제작 지원", o: "서울영상위원회", type: "로케 지원", amt: "촬영허가 대행·통제 협조", end: "2026-11-20", stu: true, reg: "서울" },
+  { id: "sup-3", t: "신진 크리에이터 숏폼·웹드라마 공모전", o: "한국콘텐츠진흥원", type: "공모전", amt: "상금 500만원", end: "2026-12-05", stu: true, reg: "전체" },
+  { id: "sup-5", t: "청년 영화인 시네마 카메라·조명 무상 대여", o: "시청자미디어재단", type: "장비·공간", amt: "장비 5일 무상 대여", end: "2026-11-30", stu: true, reg: "전체" },
+  { id: "sup-6", t: "부산 로케이션 인센티브 (숙박·식비 환급)", o: "부산영상위원회", type: "로케 지원", amt: "체류비 최대 50% 환급", end: "2026-12-15", stu: true, reg: "부산" }
 ];
 const TYPES = ["전체", "금액 지원", "로케 지원", "장비·공간", "공모전"];
 let type = "전체", mode = "type";
@@ -1504,7 +1753,8 @@ function renderSupport() {
   });
 
   const q = $("q").value.trim().toLowerCase(), stu = $("stu").checked;
-  const rows = DATA.filter(x => (type === "전체" || x.type === type) && (!stu || x.stu) && (!q || (x.t + x.o + x.reg).toLowerCase().includes(q)));
+  let rows = DATA.filter(x => (type === "전체" || x.type === type) && (!stu || x.stu) && (!q || (x.t + x.o + x.reg).toLowerCase().includes(q)));
+  if (mode === "due") rows.sort((a, b) => dd(a.end) - dd(b.end));
   $("cnt").textContent = `${rows.length} IN BIN`;
 
   const bd = $("board"); bd.innerHTML = "";
@@ -1525,7 +1775,7 @@ function renderSupport() {
 }
 $("q").oninput = renderSupport; $("stu").onchange = renderSupport;
 
-/* ===== 지도 & 렌탈 ===== */
+/* ===== CH 02: 지도 & 렌탈 ===== */
 const RENTAL_DATA = {
   "서울": [
     { name: "SLR렌트 홍대점", lat: 37.5542, lon: 126.9226, items: "FX6 · RED Komodo · 마스터 프라임", tag: "학생 20% 할인", addr: "마포구 독막로", price: 65000 },
@@ -1602,11 +1852,7 @@ function updateRouteAndRental() {
   initMap();
   const r = regSel.value;
   const sList = $("shoot-list"); sList.innerHTML = "";
-  if (!shootLocs.length) {
-    $("route-summary").textContent = "동선 미설정";
-  } else {
-    $("route-summary").textContent = `촬영지 ${shootLocs.length}곳 설정됨`;
-  }
+  $("route-summary").textContent = !shootLocs.length ? "동선 미설정" : `촬영지 ${shootLocs.length}곳 설정됨`;
 
   shootLocs.forEach((loc, idx) => {
     const tag = el("shoot-tag");
@@ -1697,7 +1943,7 @@ function updateRouteAndRental() {
   if (bounds.length > 0) lMap.fitBounds(bounds, { padding: [24, 24], maxZoom: 13 });
 }
 
-/* ===== 캘린더 & 타임라인 ===== */
+/* ===== CH 03-A: 캘린더 & 타임라인 ===== */
 const MOCK_WX = [
   { icon: "☀️", desc: "맑음", temp: "8°/17°", pop: "10%" },
   { icon: "⛅", desc: "구름많음", temp: "9°/16°", pop: "20%" },
@@ -1830,14 +2076,11 @@ function renderCalendar() {
 
 function renderDayDetail() {
   const firstDs = selDates[0], lastDs = selDates[selDates.length - 1];
-  $("sel-range-badge").textContent = selDates.length > 1 ? `${selDates.length}DAYS SELECTED` : `1DAY SELECTED`;
+  $("sel-range-badge").textContent = selDates.length > 1 ? `${selDates.length}일 선택` : `1일 선택`;
   const dt1 = new Date(firstDs + "T00:00:00");
   $("dt").textContent = selDates.length === 1
     ? `${dt1.getMonth() + 1}월 ${dt1.getDate()}일 (${WD[dt1.getDay()]}) · ${regSel.value}`
     : `${firstDs.slice(5)} ~ ${lastDs.slice(5)} (${selDates.length}일간) · ${regSel.value}`;
-
-  const w = getWx(firstDs);
-  $("dw-short").textContent = w ? `${w.icon} ${w.desc} ${w.temp} (강수 ${w.pop})` : "";
 
   const s = sunOf(firstDs, regSel.value);
   const riseStr = hm(s.rise), setStr = hm(s.set);
@@ -1898,6 +2141,370 @@ $("wx-mock").onchange = () => { renderCalendar(); renderDayDetail(); };
 
 regSel.onchange = () => {
   activeShopIdx = 0; renderShootPresets(); updateRouteAndRental(); renderCalendar(); renderDayDetail();
+};
+
+/* ===== CH 03 보기 모드 탭 전환 (통합 / 달력만 / 노션만) ===== */
+document.querySelectorAll(".ch3-tab").forEach(tab => {
+  tab.onclick = () => {
+    document.querySelectorAll(".ch3-tab").forEach(t => t.classList.remove("active"));
+    tab.classList.add("active");
+    const v = tab.dataset.view;
+    $("ch3-cal-section").hidden = (v === "notion");
+    $("ch3-notion-section").hidden = (v === "cal");
+  };
+});
+
+/* ===== CH 03-B: NOTION WORKSPACE (비회원 즉시 작업 + OAuth 2.0 실시간 동기화) ===== */
+let notionState = {
+  title: "",
+  memo: "",
+  docs: [],
+  todos: []
+};
+try {
+  const saved = JSON.parse(localStorage.getItem("media_notion_board_v1") || "null");
+  if (saved) notionState = saved;
+} catch (e) {}
+
+function saveNotionLocal() {
+  try {
+    localStorage.setItem("media_notion_board_v1", JSON.stringify(notionState));
+    $("notion-save-status").textContent = "● 로컬 자동 저장됨";
+  } catch (e) {}
+}
+
+function renderNotionWorkspace() {
+  $("nt-title").value = notionState.title || "";
+  $("nt-memo").value = notionState.memo || "";
+
+  // 서류·자료 리스트 렌더링
+  const dList = $("nt-doc-list"); dList.innerHTML = "";
+  $("nt-doc-cnt").textContent = `${notionState.docs.length}개`;
+  if (!notionState.docs.length) {
+    dList.appendChild(el("sub", "아직 등록된 서류나 자료 링크가 없습니다."));
+  } else {
+    notionState.docs.forEach((doc, idx) => {
+      const item = el("doc-item");
+      const left = el("", null, "div");
+      left.style.cssText = "display:flex;align-items:center;gap:6px;min-width:0;flex:1";
+      left.appendChild(el("tag", doc.cat, "span"));
+      if (doc.url) {
+        const a = el("", doc.name, "a");
+        a.href = doc.url; a.target = "_blank"; a.rel = "noopener";
+        left.appendChild(a);
+      } else {
+        left.appendChild(el("", doc.name, "span"));
+      }
+      const del = el("", "✕", "button");
+      del.style.cssText = "border:0;background:none;color:var(--ink-muted);cursor:pointer";
+      del.onclick = () => { notionState.docs.splice(idx, 1); saveNotionLocal(); renderNotionWorkspace(); };
+      item.appendChild(left);
+      item.appendChild(del);
+      dList.appendChild(item);
+    });
+  }
+
+  // 체크리스트 렌더링
+  const tList = $("nt-todo-list"); tList.innerHTML = "";
+  const doneCnt = notionState.todos.filter(t => t.done).length;
+  $("nt-todo-cnt").textContent = `${doneCnt}/${notionState.todos.length}`;
+  notionState.todos.forEach((td, idx) => {
+    const row = el(`todo-item ${td.done ? "done" : ""}`);
+    const lbl = el("", null, "label");
+    const chk = document.createElement("input");
+    chk.type = "checkbox"; chk.checked = td.done;
+    chk.onchange = () => { td.done = chk.checked; saveNotionLocal(); renderNotionWorkspace(); };
+    lbl.appendChild(chk);
+    lbl.appendChild(el("", td.text, "span"));
+    const del = el("", "✕", "button");
+    del.style.cssText = "border:0;background:none;color:var(--ink-muted);cursor:pointer;font-size:11px";
+    del.onclick = () => { notionState.todos.splice(idx, 1); saveNotionLocal(); renderNotionWorkspace(); };
+    row.appendChild(lbl);
+    row.appendChild(del);
+    tList.appendChild(row);
+  });
+}
+
+$("nt-title").oninput = e => { notionState.title = e.target.value; saveNotionLocal(); };
+$("nt-memo").oninput = e => { notionState.memo = e.target.value; saveNotionLocal(); };
+
+$("nt-add-doc").onclick = () => {
+  const cat = $("nt-doc-cat").value;
+  const name = $("nt-doc-name").value.trim();
+  const url = $("nt-doc-url").value.trim();
+  if (!name) return;
+  notionState.docs.push({ cat, name, url });
+  $("nt-doc-name").value = ""; $("nt-doc-url").value = "";
+  saveNotionLocal(); renderNotionWorkspace();
+};
+
+function addNotionTodo() {
+  const text = $("nt-todo-in").value.trim();
+  if (!text) return;
+  notionState.todos.push({ text, done: false });
+  $("nt-todo-in").value = "";
+  saveNotionLocal(); renderNotionWorkspace();
+}
+$("nt-add-todo").onclick = addNotionTodo;
+$("nt-todo-in").addEventListener("keydown", e => { if (e.key === "Enter") addNotionTodo(); });
+
+/* ===== NOTION OAUTH 2.0 인증 & Google Apps Script 프록시 통신 ===== */
+async function callNotionProxy(payload) {
+  // Google Apps Script CORS 우회를 위해 text/plain으로 JSON 전송
+  const res = await fetch(GAS_PROXY_URL, {
+    method: "POST",
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
+    body: JSON.stringify(payload)
+  });
+  return await res.json();
+}
+
+function updateNotionAuthUI() {
+  const token = localStorage.getItem("notion_access_token");
+  const wsName = localStorage.getItem("notion_workspace_name") || "내 Notion";
+  const authBtn = $("notion-auth-btn");
+  const disBtn = $("notion-disconnect-btn");
+  const connCtrl = $("notion-connected-controls");
+  const wsLabel = $("notion-ws-label");
+
+  if (token) {
+    authBtn.textContent = `✅ ${wsName}`;
+    authBtn.classList.add("connected");
+    disBtn.hidden = false;
+    connCtrl.hidden = false;
+    wsLabel.textContent = `🟢 [${wsName}] 워크스페이스와 실시간 연결됨`;
+  } else {
+    authBtn.textContent = "🔗 Notion 계정 연결";
+    authBtn.classList.remove("connected");
+    disBtn.hidden = true;
+    connCtrl.hidden = true;
+    wsLabel.textContent = "🔌 내 Notion 계정을 연결하면 작성한 일정·서류·메모가 내 노션 페이지로 바로 저장됩니다.";
+  }
+}
+
+// 1. Notion OAuth 로그인 창 이동
+$("notion-auth-btn").onclick = () => {
+  const token = localStorage.getItem("notion_access_token");
+  if (token) {
+    loadUserNotionPages();
+    return;
+  }
+  const authUrl = `https://api.notion.com/v1/oauth/authorize?client_id=${NOTION_CLIENT_ID}&response_type=code&owner=user&redirect_uri=${encodeURIComponent(REDIRECT_URI)}`;
+  window.location.href = authUrl;
+};
+
+$("notion-disconnect-btn").onclick = () => {
+  localStorage.removeItem("notion_access_token");
+  localStorage.removeItem("notion_workspace_name");
+  updateNotionAuthUI();
+};
+
+// 2. OAuth 리디렉션 콜백(?code=...) 처리
+async function handleNotionOAuthCallback() {
+  const params = new URLSearchParams(window.location.search);
+  const code = params.get("code");
+  if (!code) return;
+
+  // URL에서 ?code 파라미터 제거
+  window.history.replaceState({}, document.title, window.location.pathname);
+  $("notion-auth-btn").textContent = "⏳ Notion 연결 중...";
+
+  try {
+    const data = await callNotionProxy({ action: "auth", code });
+    if (data.access_token) {
+      localStorage.setItem("notion_access_token", data.access_token);
+      localStorage.setItem("notion_workspace_name", data.workspace_name || "내 Notion");
+      updateNotionAuthUI();
+      await loadUserNotionPages();
+      alert(`✅ [${data.workspace_name || "Notion"}] 워크스페이스 연결이 완료되었습니다!`);
+    } else {
+      alert("Notion 인증에 실패했습니다. Redirect URI 설정을 확인해 주세요.\n" + (data.error_description || data.error || ""));
+      updateNotionAuthUI();
+    }
+  } catch (err) {
+    alert("중계 서버 통신 중 오류가 발생했습니다: " + err.message);
+    updateNotionAuthUI();
+  }
+}
+
+// 3. 사용자가 권한 허용한 노션 페이지 목록 불러오기
+async function loadUserNotionPages() {
+  const token = localStorage.getItem("notion_access_token");
+  if (!token) return;
+
+  const sel = $("notion-target-page");
+  sel.innerHTML = `<option value="">노션 페이지 목록 불러오는 중...</option>`;
+
+  try {
+    const data = await callNotionProxy({
+      action: "notion",
+      endpoint: "/search",
+      method: "post",
+      token,
+      body: { filter: { value: "page", property: "object" }, page_size: 30 }
+    });
+
+    sel.innerHTML = "";
+    const pages = data.results || [];
+    if (!pages.length) {
+      sel.innerHTML = `<option value="">허용된 페이지 없음 (Notion 연결 시 페이지를 선택해 주세요)</option>`;
+      return;
+    }
+
+    pages.forEach(p => {
+      let pageTitle = "제목 없는 페이지";
+      if (p.properties) {
+        const titleProp = Object.values(p.properties).find(prop => prop.type === "title");
+        if (titleProp && titleProp.title && titleProp.title.length > 0) {
+          pageTitle = titleProp.title.map(t => t.plain_text).join("");
+        }
+      }
+      const opt = el("", `📄 ${pageTitle}`, "option");
+      opt.value = p.id;
+      opt.dataset.url = p.url || "https://www.notion.so";
+      sel.appendChild(opt);
+    });
+
+    if (sel.options[0]) {
+      $("notion-open-link").href = sel.options[0].dataset.url;
+    }
+  } catch (err) {
+    sel.innerHTML = `<option value="">페이지 목록 로드 실패</option>`;
+  }
+}
+
+$("notion-target-page").onchange = e => {
+  const opt = e.target.selectedOptions[0];
+  if (opt && opt.dataset.url) $("notion-open-link").href = opt.dataset.url;
+};
+$("notion-refresh-pages").onclick = loadUserNotionPages;
+
+// 4. 현재 작업공간의 일정·메모·서류·체크리스트를 내 Notion 하위 페이지로 전송 생성
+$("notion-push-btn").onclick = async () => {
+  const token = localStorage.getItem("notion_access_token");
+  const parentPageId = $("notion-target-page").value;
+  if (!token || !parentPageId) {
+    alert("먼저 상단에서 Notion 계정을 연결하고 저장할 대상 페이지를 선택해 주세요.");
+    return;
+  }
+
+  const btn = $("notion-push-btn");
+  btn.disabled = true;
+  btn.textContent = "⏳ Notion에 페이지 생성 중...";
+
+  const firstDs = selDates[0];
+  const reg = regSel.value;
+  const pageTitle = notionState.title.trim() || `[${firstDs}] ${reg} 프로덕션 보드`;
+  const rangeEvs = SCH.filter(x => selDates.includes(x.d)).sort((a, b) => (a.d + a.t).localeCompare(b.d + b.t));
+
+  const children = [
+    {
+      object: "block",
+      type: "callout",
+      callout: {
+        icon: { emoji: "🎬" },
+        rich_text: [{ type: "text", text: { content: `촬영 일자: ${selDates.join(", ")} | 지역: ${reg} | 동선: ${shootLocs.map(l => l.name).join(" → ") || "미설정"}` } }]
+      }
+    }
+  ];
+
+  if (notionState.memo.trim()) {
+    children.push({
+      object: "block",
+      type: "heading_3",
+      heading_3: { rich_text: [{ type: "text", text: { content: "📝 프로덕션 메모" } }] }
+    });
+    children.push({
+      object: "block",
+      type: "paragraph",
+      paragraph: { rich_text: [{ type: "text", text: { content: notionState.memo.trim() } }] }
+    });
+  }
+
+  if (rangeEvs.length) {
+    children.push({
+      object: "block",
+      type: "heading_3",
+      heading_3: { rich_text: [{ type: "text", text: { content: "⏰ 촬영 타임라인 일정" } }] }
+    });
+    rangeEvs.forEach(ev => {
+      children.push({
+        object: "block",
+        type: "bulleted_list_item",
+        bulleted_list_item: {
+          rich_text: [{ type: "text", text: { content: `[${ev.d} ${ev.t}] ${ev.cat} ${ev.n ? "- " + ev.n : ""}` } }]
+        }
+      });
+    });
+  }
+
+  if (notionState.docs.length) {
+    children.push({
+      object: "block",
+      type: "heading_3",
+      heading_3: { rich_text: [{ type: "text", text: { content: "📎 서류 · 자료 보관함" } }] }
+    });
+    notionState.docs.forEach(doc => {
+      const textObj = doc.url
+        ? { type: "text", text: { content: `[${doc.cat}] ${doc.name}`, link: { url: doc.url } } }
+        : { type: "text", text: { content: `[${doc.cat}] ${doc.name}` } };
+      children.push({
+        object: "block",
+        type: "bulleted_list_item",
+        bulleted_list_item: { rich_text: [textObj] }
+      });
+    });
+  }
+
+  if (notionState.todos.length) {
+    children.push({
+      object: "block",
+      type: "heading_3",
+      heading_3: { rich_text: [{ type: "text", text: { content: "☑️ 프리프로덕션 체크리스트" } }] }
+    });
+    notionState.todos.forEach(td => {
+      children.push({
+        object: "block",
+        type: "to_do",
+        to_do: {
+          rich_text: [{ type: "text", text: { content: td.text } }],
+          checked: td.done
+        }
+      });
+    });
+  }
+
+  try {
+    const res = await callNotionProxy({
+      action: "notion",
+      endpoint: "/pages",
+      method: "post",
+      token,
+      body: {
+        parent: { page_id: parentPageId },
+        icon: { emoji: "🎥" },
+        properties: {
+          title: {
+            title: [{ type: "text", text: { content: pageTitle } }]
+          }
+        },
+        children
+      }
+    });
+
+    if (res.id) {
+      $("notion-save-status").textContent = "✅ Notion 동기화 완료!";
+      if (res.url) $("notion-open-link").href = res.url;
+      alert(`🎉 내 Notion에 [${pageTitle}] 페이지가 생성되었습니다!`);
+    } else {
+      alert("Notion 페이지 생성 실패: " + (res.message || JSON.stringify(res)));
+    }
+  } catch (err) {
+    alert("전송 중 오류가 발생했습니다: " + err.message);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "📤 내 Notion에 현재 일정 & 서류 페이지 생성";
+  }
 };
 
 /* ===== CALL SHEET (일일 촬영계획표) 생성 및 인쇄 모달 로직 ===== */
@@ -1972,6 +2579,11 @@ function buildCallSheet() {
     `
     : `<p style="font-size:12px;color:#64748B;margin:6px 0 12px">선택된 렌탈샵 정보가 없습니다.</p>`;
 
+  const defaultNote = [
+    notionState.memo.trim(),
+    notionState.docs.length ? "첨부 서류: " + notionState.docs.map(d => `[${d.cat}] ${d.name}`).join(", ") : ""
+  ].filter(Boolean).join("\n");
+
   $("cs-doc-content").innerHTML = `
     <div class="cs-doc-header">
       <div>
@@ -2021,8 +2633,8 @@ function buildCallSheet() {
     <div class="cs-sec-title">03. EQUIPMENT RENTAL // 장비 픽업 및 반납처</div>
     ${shopHtml}
 
-    <div class="cs-sec-title">04. PRODUCTION NOTES & CONTACTS // 현장 특이사항 및 비상 연락망</div>
-    <textarea class="cs-note-area" placeholder="인쇄 전 현장 주차 안내, 연출/촬영팀장 비상 연락처, 소품 지참 사항 등을 자유롭게 입력하세요..."></textarea>
+    <div class="cs-sec-title">04. PRODUCTION NOTES & CONTACTS // 현장 특이사항 및 서류 현황</div>
+    <textarea class="cs-note-area" placeholder="인쇄 전 현장 주차 안내, 연출/촬영팀장 비상 연락처, 소품 지참 사항 등을 자유롭게 입력하세요...">${defaultNote}</textarea>
   `;
 }
 
@@ -2046,6 +2658,12 @@ updateRouteAndRental();
 updateTimelineUI();
 renderCalendar();
 renderDayDetail();
+renderNotionWorkspace();
+updateNotionAuthUI();
+if (localStorage.getItem("notion_access_token")) {
+  loadUserNotionPages();
+}
+handleNotionOAuthCallback();
 </script>
 </body>
 </html>
